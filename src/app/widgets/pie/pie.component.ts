@@ -28,6 +28,7 @@ export class PieComponent implements OnInit {
     console.log(this.id);
     var pieid = "#"+this.id;
     console.log(pieid);
+    $("#"+this.id).append("<p>hiworks!</p>");
     $(pieid).append("<div id='pie"+ this.id+"'  class='main' style='width: 500px;height: 500px;'></div>");
     type  EChartsOption = echarts.EChartsOption;
    
@@ -47,7 +48,18 @@ export class PieComponent implements OnInit {
     
   }
   ngAfterViewInit(){
+    $("#"+this.id).append("<p>hiworks!</p>");
+    $("#"+this.id).append("<div id='pie"+ this.id+"'  class='main' style='width: 500px;height: 500px;'></div>");
+    type  EChartsOption = echarts.EChartsOption;
+   
+    var option: EChartsOption;
+    var chartDom = document.getElementById("pie"+this.id)!;
+    // this.numId = this.numId +1;
+    console.log(document.getElementById("pie"+this.id));
     
+    var myChart = echarts.init(chartDom);
+    option = this.pieOption;
+    option && myChart.setOption(option);
    
 
  
