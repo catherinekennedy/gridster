@@ -1,0 +1,20 @@
+<!-- <ng-container *ngFor="let i of cardData">
+<nz-card style="width:300px;" [nzBordered]="false" [nzTitle]="i.title" [nzExtra]="extraTemplate">
+    <p *ngFor="let e of i.content">{{e.text}}</p>
+  </nz-card>
+</ng-container>
+<ng-template #extraTemplate>
+  <a>More</a>
+</ng-template> -->
+<ng-container *ngFor="let i of cardData">
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">{{i.title}}</h5>
+    <h6 class="card-subtitle mb-2 text-muted">{{i.subTitle}}</h6>
+    <p class="card-text">{{i.content}}</p>
+    <a href="#" class="card-link">Card link</a>
+    <a href="#" class="card-link">Another link</a>
+  </div>
+</div>
+</ng-container>
+

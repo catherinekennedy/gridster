@@ -1,0 +1,43 @@
+<p>grid works!</p>
+
+  <div class="options-header">
+    <!-- <button  (click)="pushItem()" class="add-button cols-2">
+      Resize first item and push others
+    </button> -->
+    <button  (click)="addItem()" class="add-button cols-2">
+      <i>add</i>
+    </button>
+    <button  (click)="addTable()" class="add-button cols-2">
+        <i>add Table</i>
+      </button>
+      <button  (click)="addImage()" class="add-button cols-2">
+        <i>add Image</i>
+      </button>
+      <button  (click)="addCard()" class="add-button cols-2">
+        <i>add Card</i>
+      </button>
+      <button  (click)="addPie()" class="add-button cols-2">
+        <i>add Pie</i>
+      </button>
+  </div>
+<div style="width: 90vw; height: 90vh;">
+
+<gridster [options]="options">
+    <gridster-item [item]="item" *ngFor="let item of dashboard">
+      <div class="button-holder">
+        <button (mousedown)="removeItem($event, item)"
+                (touchstart)="removeItem($event, item)">
+          <i>delete</i>
+        </button>
+        <!-- <h1 nz-title *ngIf="item.name">{{item.name}}</h1> -->
+        
+      </div>
+      <div class="gridster-item-content" style="height: 100%; margin: 5px">
+            <ndc-dynamic [ndcDynamicComponent]="item.componentType"
+            [ndcDynamicInputs]="item.inputs"
+            [ndcDynamicOutputs]="item.outputs"
+             ></ndc-dynamic>
+          </div>
+    </gridster-item>
+  </gridster>
+</div>
