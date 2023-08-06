@@ -1,0 +1,15 @@
+
+<gridster [options]="options" >
+    <gridster-item [item]="item" *ngFor="let item of dashboard"  >
+
+      <div class="gridster-item-content" style="height: 100%; margin: 5px" class="my-class">
+      
+            <ndc-dynamic [ndcDynamicComponent]="item.componentType"
+            
+            [ndcDynamicInputs]="item.inputs"
+            [ndcDynamicOutputs]="item.outputs"
+             ></ndc-dynamic>
+            
+          </div>
+    </gridster-item>
+  </gridster>

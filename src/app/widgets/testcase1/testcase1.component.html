@@ -1,0 +1,461 @@
+<!-- <nz-page-header class="shadow-card"> -->
+    <nz-breadcrumb nz-page-header-breadcrumb>
+      <nz-breadcrumb-item>
+        <a
+          queryParamsHandling="merge"
+          [routerLink]="['/setup/launchpad']"
+          queryParamsHandling="preserve"
+        >
+          Home
+        </a>
+      </nz-breadcrumb-item>
+  
+      <nz-breadcrumb-item>
+        <a
+          queryParamsHandling="merge"
+          [routerLink]="['/pages/phase']"
+          queryParamsHandling="preserve"
+        >
+          Phase Kernel
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item
+        ><a
+          queryParamsHandling="merge"
+          [routerLink]="['/pages/modules/test-suite/test-catalogue']"
+          queryParamsHandling="preserve"
+        >
+          Test Catalogue
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item> Test Case Wizard </nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <nz-page-header-title>Test Case Wizard</nz-page-header-title>
+    <nz-page-header-subtitle> title </nz-page-header-subtitle>
+  
+    <nz-page-header-content>
+      <div class="wrap">
+        <div class="content">
+          <div class="collapsible content" [@collapse]="collapsed"></div>
+          <div>
+            <ul nz-menu [nzMode]="'horizontal'">
+              <li
+                [nzSelected]="content === 'center'"
+                nz-menu-item
+                (click)="content = 'center'; title = 'Test Center'"
+              >
+                <i class="fas fa-list"></i> Test Center
+              </li>
+              <li
+                [nzSelected]="content === 'lab'"
+                nz-menu-item
+                (click)="content = 'lab'; title = 'Test Lab'"
+              >
+                <i class="fas fa-cube"></i> Test Lab
+              </li>
+              <!-- <li
+                [nzSelected]="content === 'console'"
+                nz-menu-item
+                (click)="content = 'console'; title = 'Auto Test Console'"
+              >
+                <i class="fas fa-brain"></i> Auto Test Console
+              </li> -->
+              <li
+                [nzSelected]="content === 'defects'"
+                nz-menu-item
+                (click)="content = 'defects'; title = 'Defects Repository'"
+              >
+                <i class="fas fa-bug"></i> Defects Repository
+              </li>
+              <li
+                [nzSelected]="content === 'history'"
+                nz-menu-item
+                (click)="content = 'history'; title = 'History'"
+              >
+                <i class="fas fa-history"></i> History
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="extra-content">
+          <!-- <button nz-button nzType="link" (click)="showModal()">
+            <i class="fas fa-cog"></i> show modal
+          </button> -->
+          <a nz-button nzType="link" (click)="showModalMiddle()">
+            Help <i class="fas fa-question-circle"></i>
+          </a>
+          <button
+            nz-button
+            nzType="link"
+            (click)="content = 'configuration'; title = 'Test Configuration'"
+          >
+            <i class="fas fa-cog"></i> Test Configuration
+          </button>
+        </div>
+      </div>
+    </nz-page-header-content>
+  <!-- </nz-page-header> -->
+  <nz-row class="mt-2">
+    <ng-container [ngSwitch]="content">
+      <div *ngSwitchCase="'center'">
+        <nz-card class="shadow-card">
+          <div *ngIf="results">
+            <!-- start -->
+            <!-- <kt-test-case-wizard-header
+              [results]="results"
+              [project]="projectNames[0]"
+              [user]="userDetails"
+              [users]="userList"
+              (callApi)="callApiFn($event)"
+            >
+            </kt-test-case-wizard-header> -->
+          </div>
+          <!-- <kt-test-center
+            *ngIf="results"
+            [plannedVsActual]="plannedVsActual"
+            [stakeholders]="stakeholders"
+            [results]="results"
+          ></kt-test-center> -->
+        </nz-card>
+      </div>
+      <div *ngSwitchCase="'configuration'">
+        <nz-card class="shadow-card">
+          <!-- <kt-labs-configuration></kt-labs-configuration> -->
+        </nz-card>
+      </div>
+      <div *ngSwitchCase="'lab'">
+        <nz-alert
+          *ngIf="showAlert"
+          nzCloseable="true"
+          nzType="info"
+          nzShowIcon="true"
+          nzDescription="KTern.AI is now processing the results"
+        ></nz-alert>
+        <!-- <kt-labs-test-lab></kt-labs-test-lab> -->
+      </div>
+      <div *ngSwitchCase="'console'">
+        <nz-card class="shadow-card">
+          <!-- <kt-auto-testing-console
+            [results]="results"
+            [current]="current"
+          ></kt-auto-testing-console> -->
+        </nz-card>
+      </div>
+      <div *ngSwitchCase="'defects'">
+        <nz-card class="shadow-card">
+          <!-- <kt-defects-repository
+            (callApi)="callApiFn($event)"
+            [results]="results"
+            [defects]="defects"
+            [called]="called"
+          ></kt-defects-repository> -->
+<div class="row">
+  <div class="col-md-12">
+    <small style="float: right">
+      <button
+        (click)="openIssueDrawer()"
+        style="float: right"
+        nz-button
+        nzType="primary"
+        nzSize="default"
+      >
+        <i class="far fa-edit"></i> &nbsp;
+        <small>Add new Defect</small>
+      </button>
+    </small>
+  </div>
+</div>
+<br />
+<div class="row">
+  <div class="col-md-12">
+    <!-- <p-table [columns]="cols" [value]="defects" *ngIf="defects.length !== 0">
+      <ng-template pTemplate="caption">
+        <div class="ui-helper-clearfix">
+          <button nz-button nzType="default" (click)="dt.exportCSV()" style="float:left">
+            <i class="far fa-file-excel" style="color:green"></i> &nbsp; Export as Sheet
+          </button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th
+            *ngFor="let col of columns"
+            [pSortableColumn]="col.field"
+            style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+          >
+            {{ col.header }}
+          </th>
+        </tr>
+      
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+          <td *ngFor="let col of columns">
+            <small *ngIf="col.field === 'edit'">
+              <button
+                nz-button
+                nzType="default"
+                nzShape="circle"
+                (click)="openComponent(rowData[col.data], rowData)"
+              >
+                <small><i class="far fa-edit"></i></small>
+              </button>
+            </small>
+            <small
+              *ngIf="
+                col.field === 'plannedFrom' || col.field === 'plannedTo';
+                else others
+              "
+            >
+              {{ rowData[col.field] | date: "mediumDate":"UTC" }}
+            </small>
+            <ng-template #others>
+              <small>{{ rowData[col.field] }}</small>
+            </ng-template>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <kt-empty-component *ngIf="defects.length === 0"></kt-empty-component> -->
+  </div>
+</div>
+
+          <!-- end -->
+        </nz-card>
+      </div>
+      <div *ngSwitchCase="'history'">
+        <nz-card class="shadow-card">
+          <div class="col-md-12" style="padding-left: 40px">
+            <!-- <kt-global-history [inputID]="id"> </kt-global-history> -->
+          </div>
+        </nz-card>
+      </div>
+    </ng-container>
+  </nz-row>
+  <!-- <div *ngIf="results; else image">
+    <nz-card style="width: 100%">
+      <div class="row">
+        <div class="col-md-12" *ngIf="results">
+          <kt-test-case-wizard-header
+            [results]="results"
+            [project]="projectNames[0]"
+            [user]="userDetails"
+            [users]="userList"
+            (callApi)="callApiFn($event)"
+          >
+          </kt-test-case-wizard-header>
+        </div>
+      </div>
+    </nz-card>
+    <br />
+    <nz-card style="width: 100%">
+      <nz-tabset *ngIf="results">
+        <nz-tab [nzTitle]="testCenterTemplate">
+          <kt-test-center
+            [plannedVsActual]="plannedVsActual"
+            [stakeholders]="stakeholders"
+            [results]="results"
+          ></kt-test-center>
+        </nz-tab>
+        <nz-tab (nzClick)="callApiFn($event)" [nzTitle]="testLabTemplate">
+          <kt-test-lab
+            [log]="log"
+            (refresh)="callApiFn($event)"
+            [script]="script"
+            [results]="results"
+            (openTestScript)="testScript = 'true'"
+            (openTestLog)="executionLog = 'true'"
+          >
+          </kt-test-lab>
+        </nz-tab>
+        <nz-tab [nzTitle]="autoTestConsoleTemplate">
+          <kt-auto-testing-console
+            [results]="results"
+            [current]="current"
+          ></kt-auto-testing-console>
+        </nz-tab>
+        <nz-tab [nzTitle]="defectsRepositoryTemplate">
+          <kt-defects-repository
+            (callApi)="callApiFn($event)"
+            [results]="results"
+            [defects]="defects"
+            [called]="called"
+          ></kt-defects-repository>
+        </nz-tab>
+        <nz-tab [nzTitle]="historyTemplate">
+          <div class="row">
+            <div class="col-md-12" style="padding-left: 40px">
+              <kt-global-history [inputID]="id"> </kt-global-history>
+            </div>
+          </div>
+        </nz-tab>
+      </nz-tabset>
+    </nz-card>
+  </div> -->
+  
+  <ng-template #image>
+    <nz-spin nzTip="Loading..." [nzSpinning]="isDataLoading">
+      <div class="text-center">
+        <h5>Loading the Test Case Wizard page</h5>
+        <img
+          src="../../../../assets/images/in-app-images-ktern/fast-loading.svg"
+          alt=""
+          height="30%"
+          width="30%"
+        />
+      </div>
+    </nz-spin>
+  </ng-template>
+  
+  <!--Templates-->
+  <ng-template #defectsRepositoryTemplate>
+    <strong> <i class="fas fa-bug"></i> &nbsp; Defects Repository </strong>
+  </ng-template>
+  <ng-template #historyTemplate>
+    <i class="fas fa-history"></i> &nbsp; History
+  </ng-template>
+  <ng-template #testCenterTemplate>
+    <strong> <i class="fas fa-vials"></i> &nbsp; Test Center </strong>
+    
+  </ng-template>
+  <ng-template #testLabTemplate>
+    <strong> <i class="fas fa-clipboard-check"></i> &nbsp; Test Lab </strong>
+  </ng-template>
+  <ng-template #autoTestConsoleTemplate>
+    <strong> <i class="fas fa-brain"></i> &nbsp; Auto Test Console </strong>
+  </ng-template>
+  <ng-template #discussionsTemplate>
+    <i class="far fa-comment-dots"></i> &nbsp; Discussions
+  </ng-template>
+  <ng-template #filesTemplate>
+    <i class="far fa-file"></i> &nbsp; Files
+  </ng-template>
+  <ng-template #referencesTemplate>
+    <i class="fas fa-asterisk"></i> &nbsp; References
+  </ng-template>
+  <ng-template #wikiNotesTemplate>
+    <i class="far fa-clipboard"></i> &nbsp; Notes
+  </ng-template>
+  <nz-modal
+    [(nzVisible)]="isVisible"
+    nzClosable="true"
+    [nzFooter]="null"
+    nzWidth="920"
+    nzKeyboard="true"
+    nzTitle="Intelligent Self Heal Prompt"
+    (nzOnCancel)="handleCancel()"
+    (nzOnOk)="handleOk()"
+  >
+    <!-- <kt-labs-self-heal-prompt
+      [scriptID]="selfHealScriptID"
+      [selfHealData]="selfHealData"
+    >
+    </kt-labs-self-heal-prompt> -->
+  </nz-modal>
+  <nz-modal
+    nzWrapClassName="vertical-center-modal"
+    [(nzVisible)]="isVisibleMiddle"
+    [nzBodyStyle]="modalBodyStyle"
+    nzWidth="1020px"
+    nzTitle="How to use KTern Fiori Recorder ?"
+    (nzOnCancel)="handleCancelMiddle()"
+    (nzOnOk)="handleOkMiddle()"
+  >
+    <small>
+      In order to ensure client side connectivity with the Fiori Application and
+      KTern systems, the 'KTern Fiori Recorder' is provided. Please follow the
+      10-STEP procedure below to get started in 10-MINUTES :
+    </small>
+    <small>
+      <ol>
+        <li>
+          Click 'Download KTern Fiori Recorder' and save it in a preferable
+          location on your desktop/laptop.
+        </li>
+        <li>Unzip the downloaded 'ktern.zip' file.</li>
+        <li>Open your preferred browser.</li>
+        <li>Click on Browser settings -> Extensions</li>
+        <li>Enable Developer Mode</li>
+        <li>Click on Load Unpacked</li>
+        <li>Navigate to the downloaded location and load the folder</li>
+        <li>The Extension will be loaded as part of your browser</li>
+        <li>You can start using the Recorder to record your test scripts</li>
+        <li>Enter your Fiori App URL and click start recording</li>
+      </ol>
+    </small>
+  </nz-modal>
+  
+  <ng-template #contentTemplate>
+    <b style="font-size: 15px; margin-left: 200px">
+      How to use KTern On-Premise Connector ? </b
+    ><br /><br />
+    <small style="margin-left: 200px">
+      In order to ensure client side connectivity with the SAP ECC & SAP S/4HANA
+      systems, the 'KTern On-Premise Connector' is provided. Please follow the
+      10-STEP procedure below to get started in 10-MINUTES :
+      <ol style="margin-left: 200px">
+        <li>
+          Click <b>'Download KTern Connector'</b> and save it in a preferable
+          location on your desktop/laptop.
+        </li>
+        <li>Unzip the downloaded <b>'KTern.zip'</b> file.</li>
+        <li>Open the <b>'KTern On-premise Connector.exe'</b> application.</li>
+        <li>
+          Kindly wait for few seconds for the app to launch and settle down in the
+          taskbar system tray. At next, you can continue to use the KTern web
+          application.
+        </li>
+        <li>
+          In web app, add a system in 'Landscape Management' by clicking on
+          <b>'+ New system'</b> and enter with the required details.
+        </li>
+        <li>
+          Please note the following considerations :
+          <ul style="margin-left: 40px">
+            <li>
+              Kindly ensure you are in the <b>SAP client network</b> (or) get
+              connected to the corresponding network through
+              <b>'Remote Access VPN or Site-to-Site VPN'</b>.
+            </li>
+            <li>
+              Port <b>33xx</b> must be accessible in client network as it is the
+              default SAP Gateway port (where xx relates to the Instance number of
+              SAP system, SAP Ports reference :
+              https://help.sap.com/viewer/ports).
+            </li>
+            <li>
+              If translation of IP addresses is carried out using <b>NAT</b>,
+              kindly refer to the SAP Note 148832​ for further instructions.
+            </li>
+            <li>
+              A
+              <b>'dialog user (or) service user (or) communication data user'</b>
+              with <b>SAP_ALL</b> authorization profile must be ensured.
+            </li>
+            <li>
+              Just verify if the <b>64-bit 'Java SE Runtime Environment'</b> is
+              installed in your Windows machine.
+            </li>
+            <li>WiFi/LAN network bandwidth and stability must be ensured.</li>
+          </ul>
+        </li>
+  
+        <li>Click <b>'Connect'</b> for connecting onto the respective system.</li>
+        <li>
+          Enter the <b>username & password</b> of the respective system. Click
+          <b>'Submit'</b> and hold on for few seconds for the result.
+        </li>
+        <li>
+          If connection is established, the system status will turn
+          <b>'Connected'</b> with the success message. If not, an error message
+          will be displayed and please check the above instructions to try
+          connecting once again.
+        </li>
+        <li>
+          You can now execute the KTern automated activities, thanks to the
+          seamless experience offered by KTern for system connectivity.
+        </li>
+      </ol>
+    </small>
+  </ng-template>
+  

@@ -1,0 +1,38 @@
+<ul nz-menu [nzMode]="'horizontal'">
+    <li
+      [nzSelected]="content === 'center'"
+      nz-menu-item
+      (click)="content = 'center'; title = 'Test Center'"
+    >
+      <i class="fas fa-list"></i> Test Center
+    </li>
+    <li
+      [nzSelected]="content === 'lab'"
+      nz-menu-item
+      (click)="content = 'lab'; title = 'Test Lab'"
+    >
+      <i class="fas fa-cube"></i> Test Lab
+    </li>
+    <!-- <li
+      [nzSelected]="content === 'console'"
+      nz-menu-item
+      (click)="content = 'console'; title = 'Auto Test Console'"
+    >
+      <i class="fas fa-brain"></i> Auto Test Console
+    </li> -->
+    <li
+      [nzSelected]="content === 'defects'"
+      nz-menu-item
+      (click)="content = 'defects'; title = 'Defects Repository'"
+    >
+      <i class="fas fa-bug"></i> Defects Repository
+    </li>
+    <li
+      [nzSelected]="content === 'history'"
+      nz-menu-item
+      (click)="content = 'history'; title = 'History'"
+    >
+      <i class="fas fa-history"></i> History
+    </li>
+  </ul>
+

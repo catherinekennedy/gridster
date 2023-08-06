@@ -10,6 +10,9 @@
     <button  (click)="addTable()" class="add-button cols-2">
         <i>add Table</i>
       </button>
+      <button  (click)="addTestCase()" class="add-button cols-2">
+        <i>add TestCase</i>
+      </button>
       <button  (click)="addImage()" class="add-button cols-2">
         <i>add Image</i>
       </button>
@@ -18,6 +21,12 @@
       </button>
       <button  (click)="addPie()" class="add-button cols-2">
         <i>add Pie</i>
+      </button>
+      <button   class="add-button cols-2" (click)="showModal()">
+        <i>add bar</i>
+      </button>
+      <button   class="add-button cols-2" (click)="showPreview()">
+        <i>Preview</i>
       </button>
   </div>
 <div style="width: 90vw; height: 90vh;">
@@ -29,6 +38,8 @@
                 (touchstart)="removeItem($event, item)">
           <i>delete</i>
         </button>
+       
+       
         <!-- <h1 nz-title *ngIf="item.name">{{item.name}}</h1> -->
         
       </div>
@@ -41,3 +52,51 @@
     </gridster-item>
   </gridster>
 </div>
+
+
+<!-- Modal -->
+<!-- <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div clas="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+        <form [formGroup]="barForm" (ngSubmit)="onSubmit(barForm)">
+          <div class="modal-body">
+          <div class="form-group">
+            <label for="exampleFormControlInput1">Chart Type</label>
+            <input type="text" class="form-control" formControlName = "chartType">
+          </div>
+        </div>
+        
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div> -->
+
+
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk(barForm)">
+ <form [formGroup]="barForm">
+  <nz-select formControlName = "chartType" nzAllowClear nzPlaceHolder="Choose">
+    <nz-option nzValue="bar" nzLabel="Bar"></nz-option>
+    <nz-option nzValue="line" nzLabel="Line"></nz-option>
+  </nz-select>
+  <br><br>
+
+  <input nz-input placeholder="Enter the id"  formControlName = "chartId" />
+      
+        <!-- <input type="text"  formControlName = "chartType"/> -->
+      
+    
+    </form>
+</nz-modal>

@@ -1,11 +1,24 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation,EventEmitter} from '@angular/core';
 import {CompactType, GridsterConfig, GridsterItem, GridsterItemComponent, GridsterPush, GridType} from 'angular-gridster2';
-
+declare var $: any;
 
 import { TableComponent } from '../widgets/table/table.component';
 import { ImageComponent } from '../widgets/image/image.component';
 import { CardComponent } from '../widgets/card/card.component';
 import { PieComponent } from '../widgets/pie/pie.component';
+import { BarComponent } from '../widgets/bar/bar.component';
+import { Testcase1Component } from '../widgets/testcase1/testcase1.component';
+
+import { FormControl, FormGroup } from '@angular/forms';
+
+import { LocalStorageService } from '../services/local-storage.service';
+
+import {MenuItem} from 'primeng/api';
+
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+
+
+
 @Component({
   selector: 'app-grid',
   templateUrl: './grid.component.html',
@@ -14,12 +27,18 @@ import { PieComponent } from '../widgets/pie/pie.component';
 
 export class GridComponent implements OnInit {
   options: GridsterConfig;
-  dashboard: Array<GridsterItem>;
+  dashboard: Array<GridsterItem>=[];
   itemToPush: GridsterItemComponent;
   private resizeEvent: EventEmitter<any> = new EventEmitter<any>();
   private configureEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  constructor() { }
+  items: MenuItem[];
+
+
+  barForm:FormGroup;
+  
+
+  constructor(private localStore: LocalStorageService,private router: Router,) { }
   static itemChange(item, itemComponent) {
     console.info('itemChanged', item, itemComponent);
   }
@@ -30,6 +49,41 @@ export class GridComponent implements OnInit {
 
 
   ngOnInit() {
+
+    this.items = [
+     
+      {
+          label:'Edit',
+          icon:'pi pi-fw pi-pencil',
+          items:[
+              {
+                  label:'Card',
+                  icon:'pi pi-fw pi-align-left',
+                  
+              
+              },
+              {
+                  label:'Pie',
+                  icon:'pi pi-fw pi-align-right'
+              },
+              {
+                  label:'Bar/Line',
+                  icon:'pi pi-fw pi-align-center'
+              },
+              {
+                  label:'Image',
+                  icon:'pi pi-fw pi-align-justify'
+              },
+
+          ]
+      },
+     
+  ];
+
+    this.barForm = new FormGroup({
+      'chartType' : new FormControl(null),
+      'chartId' : new FormControl(null)
+    })
 
     this.options = {
       gridType: GridType.ScrollVertical,
@@ -45,20 +99,18 @@ export class GridComponent implements OnInit {
         enabled: true
       }
     };
-
-    this.dashboard = [
-      {cols: 2, rows: 1, y: 0, x: 0, initCallback: this.initItem.bind(this)},
-      {cols: 2, rows: 1, y: 0, x: 2},
-      {cols: 1, rows: 1, y: 0, x: 4},
-      // {cols: 3, rows: 2, y: 1, x: 4},
-      // {cols: 1, rows: 1, y: 4, x: 5},
-      // {cols: 1, rows: 1, y: 2, x: 1},
-      // {cols: 2, rows: 2, y: 5, x: 5},
-      // {cols: 2, rows: 2, y: 3, x: 2},
-      // {cols: 2, rows: 1, y: 2, x: 2},
-      // {cols: 1, rows: 1, y: 3, x: 4},
-      // {cols: 1, rows: 1, y: 0, x: 6}
-    ];
+     this.dashboard = this.localStore.jsonparse(this.localStore.getData("dashboardData"));
+    // this.dashboard = [
+    //   {cols: 2, rows: 1, y: 0, x: 0},
+    
+    //   // {cols: 1, rows: 1, y: 4, x: 5},
+    //   // {cols: 1, rows: 1, y: 2, x: 1},
+    //   // {cols: 2, rows: 2, y: 5, x: 5},
+    //   // {cols: 2, rows: 2, y: 3, x: 2},
+    //   // {cols: 2, rows: 1, y: 2, x: 2},
+    //   // {cols: 1, rows: 1, y: 3, x: 4},
+    //   // {cols: 1, rows: 1, y: 0, x: 6}
+    // ];
   }
 
 
@@ -73,6 +125,11 @@ export class GridComponent implements OnInit {
     $event.stopPropagation();
     this.dashboard.splice(this.dashboard.indexOf(item), 1);
   }
+  add($event, item,items){
+    console.log($event);
+    console.log(item);
+    console.log(items);
+  }
 
   addItem() {
     this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
@@ -82,7 +139,7 @@ export class GridComponent implements OnInit {
     this.dashboard.push({
       id: "1",
       name: "Table",
-      componentName: "table",
+      componentName: "TableComponent",
       componentType: TableComponent,
       inputs:{tableData:[
         {
@@ -119,6 +176,7 @@ export class GridComponent implements OnInit {
       rows: 1,
       y: 0,
       x: 0,
+      componentName:"ImageComponent",
       componentType: ImageComponent,
       inputs:{imageData:[
         {
@@ -164,7 +222,7 @@ export class GridComponent implements OnInit {
     this.dashboard.push({
       id: "2",
       name: "Card",
-      componentName: "card",
+      componentName: "CardComponent",
       cols: 2,
       rows: 1,
       y: 0,
@@ -184,12 +242,13 @@ export class GridComponent implements OnInit {
   
   }
   numId = 0;
+  barId = 0;
   addPie() {
    
     this.dashboard.push({
       id: "2",
       name: "Pie",
-      componentName: "Pie",
+      componentName: "PieComponent",
       cols: 2,
       rows: 2,
       y: 0,
@@ -241,6 +300,121 @@ export class GridComponent implements OnInit {
   
   }
 
+  addTestCase(){
+    this.dashboard.push({
+      id: "2",
+      name: "Pie",
+      componentName: "Testcase1Component",
+      cols: 2,
+      rows: 2,
+      y: 0,
+      x: 0,
+      componentType: Testcase1Component,
+      
+    
+    });
+
+  }
+
+  isVisible = false;
+  showModal(): void {
+    this.isVisible = true;
+  }
+
+  handleOk(e): void {
+    console.log('Button ok clicked!');
+    this.isVisible = false;
+    console.log(e);
+    console.log(this.barId);
+    // e.reset();
+   
+    this.dashboard.push({
+      id: "2",
+      name: "bar",
+      componentName: 'BarComponent',
+      cols: 2,
+      rows: 2,
+      y: 0,
+      x: 0,
+      minItemRows: 2,
+      minItemCols: 2,
+      componentType: BarComponent,
+      inputs:{
+        barOption : 
+        {
+          xAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+              data: [120, 200, 150, 80, 70, 110, 130],
+              type: e.value.chartType,
+              showBackground: true,
+              backgroundStyle: {
+                color: 'rgba(180, 180, 180, 0.2)'
+              }
+            }
+          ]
+        },
+    id: e.value.chartId},
+    
+    });
+    this.barId= this.barId +1; 
+    console.log(this.barId);
+  }
+
+  handleCancel(): void {
+    console.log('Button cancel clicked!');
+    this.isVisible = false;
+  }
+
+  onSubmit(e) {
+    console.log(e);
+    // e.reset();
+   
+    this.dashboard.push({
+      id: "2",
+      name: "bar",
+      componentName: "BarComponent",
+      cols: 2,
+      rows: 2,
+      y: 0,
+      x: 0,
+      minItemRows: 2,
+      minItemCols: 2,
+      componentType: BarComponent,
+      inputs:{
+        barOption : 
+        {
+          xAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+              data: [120, 200, 150, 80, 70, 110, 130],
+              type: e.value.chartType,
+              showBackground: true,
+              backgroundStyle: {
+                color: 'rgba(180, 180, 180, 0.2)'
+              }
+            }
+          ]
+        },
+    id: 'barcomp'+this.barId},
+    
+    });
+    this.numId= this.numId +1; 
+    console.log(this.numId);
+  
+  }
   initItem(item: GridsterItem, itemComponent: GridsterItemComponent) {
     this.itemToPush = itemComponent;
   }
@@ -259,6 +433,18 @@ export class GridComponent implements OnInit {
     }
     push.destroy(); // destroy push instance
     // similar for GridsterPushResize and GridsterSwap
+
+    
+  }
+  showPreview(){
+    // JSON.stringify
+    this.localStore.saveData('dashboardData',JSON.stringify(this.dashboard));
+    // localStorage.setItem('token',JSON.stringify(this.dashboard));
+    console.log(this.dashboard);
+    console.log(this.localStore.getData('dashboardData'));
+    this.router.navigate(['preview']);
   }
 
+  
+ 
 }

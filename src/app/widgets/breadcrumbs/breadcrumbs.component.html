@@ -1,0 +1,31 @@
+<nz-breadcrumb nz-page-header-breadcrumb>
+    <nz-breadcrumb-item>
+      <a
+        queryParamsHandling="merge"
+        [routerLink]="['/setup/launchpad']"
+        queryParamsHandling="preserve"
+      >
+        Home
+      </a>
+    </nz-breadcrumb-item>
+
+    <nz-breadcrumb-item>
+      <a
+        queryParamsHandling="merge"
+        [routerLink]="['/pages/phase']"
+        queryParamsHandling="preserve"
+      >
+        Phase Kernel
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item
+      ><a
+        queryParamsHandling="merge"
+        [routerLink]="['/pages/modules/test-suite/test-catalogue']"
+        queryParamsHandling="preserve"
+      >
+        Test Catalogue
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item> Test Case Wizard </nz-breadcrumb-item>
+  </nz-breadcrumb>
